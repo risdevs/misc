@@ -68,6 +68,10 @@ int main()
 	glewExperimental = GL_TRUE;
 	glewInit();
 
+
+	glEnable(GL_DEPTH_TEST);
+
+
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -79,30 +83,60 @@ int main()
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 
-	float vertices[] = {
-	//  Position      Color             Texcoords
-	    -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
-	     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
-	     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
-	    -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
-	};
+	GLfloat vertices[] = {
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+
+        //reflection
+        -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+	     1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+	     1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	     1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	    -1.0f,  1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+	    -1.0f, -1.0f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+    };
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-
-	
-	//Create an element array
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-
-	GLuint elements[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
 
 	///////////
@@ -124,16 +158,16 @@ int main()
 	
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
+	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
 
 
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "color");
 	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*) (2 * sizeof(float)));
+	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
 
 	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
 	glEnableVertexAttribArray(texAttrib);
-	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(5*sizeof(float)));
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6*sizeof(float)));
 
 
 
@@ -183,14 +217,14 @@ int main()
 	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
 
 	glm::mat4 view = glm::lookAt(
-	    glm::vec3(1.2f, 1.2f, 1.2f),
+	    glm::vec3(3.5f, 3.5f, 3.5f),
 	    glm::vec3(0.0f, 0.0f, 0.0f),
 	    glm::vec3(0.0f, 0.0f, 1.0f)
 	);
 	GLint uniView = glGetUniformLocation(shaderProgram, "view");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
 
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.f);
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 100.f);
 	GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
@@ -198,43 +232,56 @@ int main()
 
 	///////////
 	//RUN LOOP
+
+	GLint uniOverrideColor = glGetUniformLocation(shaderProgram, "overrideColor");
 	GLuint mixValue = glGetUniformLocation(shaderProgram, "mixVal");
 	glUniform1f(mixValue, 0.5f);
 
-	GLfloat angle = -45.0f;
-	GLfloat speed = 0.f;
 	while(!glfwWindowShouldClose(window))
 	{
-		/*
     	glm::mat4 model;
 		model = glm::rotate(
 		    model,
 		    glm::radians((float)clock() / (float)CLOCKS_PER_SEC * 50.f * 180.0f),
-		    glm::vec3(1.0f, 0.0f, 0.0f)
+		    glm::vec3(0.0f, 0.0f, 1.0f)
 		);
-		*/
-		glm::mat4 model;
-		model = glm::rotate(
-		    model,
-		    glm::radians(angle),
-		    glm::vec3(1.0f, 0.0f, 0.0f)
-		);
-
-		angle += speed;
-		speed /= 1.05f;
-
-		GLfloat s = sin((GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC * 100.0f) * 0.25f + 0.75f;
-		model = glm::scale(model, glm::vec3(s, s, s));
 
 		glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		
 		// Clear the screen to black
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		glEnable(GL_STENCIL_TEST);
+
+		    // Draw floor
+		    glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+		    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		    glStencilMask(0xFF); // Write to stencil buffer
+		    glDepthMask(GL_FALSE); // Don't write to depth buffer
+		    glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+		    glDrawArrays(GL_TRIANGLES, 36, 6);
+
+		    // Draw cube reflection
+		    glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+		    glStencilMask(0x00); // Don't write anything to stencil buffer
+		    glDepthMask(GL_TRUE); // Write to depth buffer
+
+		    model = glm::scale(
+		        glm::translate(model, glm::vec3(0, 0, -1)),
+		        glm::vec3(1, 1, -1)
+		    );
+		    glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
+		    glUniform3f(uniOverrideColor, 0.3f, 0.3f, 0.3f);
+		    glDrawArrays(GL_TRIANGLES, 0, 36);
+		    glUniform3f(uniOverrideColor, 1.0f, 1.0f, 1.0f);
+
+		glDisable(GL_STENCIL_TEST);
 
 
 	    glfwSwapBuffers(window);
@@ -243,16 +290,17 @@ int main()
 	    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		    glfwSetWindowShouldClose(window, GL_TRUE);
 
-	    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		    speed = 100.f;
-
 	}
+
+
+	glDeleteTextures(2, textures);
 
 	glDeleteProgram(shaderProgram);
     glDeleteShader(fragmentShader);
     glDeleteShader(vertexShader);
 
     glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
 
     glfwTerminate();
 }
