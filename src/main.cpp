@@ -1,7 +1,12 @@
 #define GLEW_STATIC
+#define GLM_FORCE_RADIANS 
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <SOIL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <thread>
 #include <string>
@@ -169,18 +174,60 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+
+
+
+
+    ////////////
+    //TRANSFORMATIONS
+	GLint uniModel = glGetUniformLocation(shaderProgram, "model");
+
+	glm::mat4 view = glm::lookAt(
+	    glm::vec3(1.2f, 1.2f, 1.2f),
+	    glm::vec3(0.0f, 0.0f, 0.0f),
+	    glm::vec3(0.0f, 0.0f, 1.0f)
+	);
+	GLint uniView = glGetUniformLocation(shaderProgram, "view");
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
+
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.f);
+	GLint uniProj = glGetUniformLocation(shaderProgram, "proj");
+	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
+
+
+
 	///////////
 	//RUN LOOP
-
-	GLuint timeUn = glGetUniformLocation(shaderProgram, "time");
 	GLuint mixValue = glGetUniformLocation(shaderProgram, "mixVal");
 	glUniform1f(mixValue, 0.5f);
+
+	GLfloat angle = -45.0f;
+	GLfloat speed = 0.f;
 	while(!glfwWindowShouldClose(window))
 	{
-		
-		float time = (float)clock() / (float)CLOCKS_PER_SEC;
-		glUniform1f(timeUn, time);
-		//glUniform1f(mixValue, (sin(time * 100.0f) + 1.0f) / 2.0f);
+		/*
+    	glm::mat4 model;
+		model = glm::rotate(
+		    model,
+		    glm::radians((float)clock() / (float)CLOCKS_PER_SEC * 50.f * 180.0f),
+		    glm::vec3(1.0f, 0.0f, 0.0f)
+		);
+		*/
+		glm::mat4 model;
+		model = glm::rotate(
+		    model,
+		    glm::radians(angle),
+		    glm::vec3(1.0f, 0.0f, 0.0f)
+		);
+
+		angle += speed;
+		speed /= 1.05f;
+
+		GLfloat s = sin((GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC * 100.0f) * 0.25f + 0.75f;
+		model = glm::scale(model, glm::vec3(s, s, s));
+
+		glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
+
 		
 		// Clear the screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -195,6 +242,9 @@ int main()
 
 	    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		    glfwSetWindowShouldClose(window, GL_TRUE);
+
+	    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		    speed = 100.f;
 
 	}
 

@@ -18,3 +18,4 @@ Resources/SoftLinksCocoaAssets/
 *.xccheckout
 *.locuser
 *.o
+src/main
