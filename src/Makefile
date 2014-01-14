@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-g -Wall -pedantic -ansi -c -I/usr/local/include
 LDFLAGS=-g -L/usr/local/lib
-LIBS=-lGLEW -lglfw3
+LIBS=-lGLEW -lglfw3 -lSOIL
 FRAMEWORKS= -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 SOURCES=$(wildcard *.cpp)

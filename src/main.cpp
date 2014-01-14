@@ -1,7 +1,8 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
-
 #include <GLFW/glfw3.h>
+#include <SOIL.h>
+
 #include <thread>
 #include <string>
 #include <fstream>
@@ -74,10 +75,11 @@ int main()
 	glGenBuffers(1, &vbo);
 
 	float vertices[] = {
-	    -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // Top-left
-	     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // Top-right
-	     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // Bottom-right
-	    -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, // Bottom-left
+	//  Position      Color             Texcoords
+	    -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
+	     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
+	     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+	    -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
 	};
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -117,30 +119,68 @@ int main()
 	
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
 
 
 	GLint colAttrib = glGetAttribLocation(shaderProgram, "color");
 	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) (2 * sizeof(float)));
+	glVertexAttribPointer(colAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*) (2 * sizeof(float)));
+
+	GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
+	glEnableVertexAttribArray(texAttrib);
+	glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7*sizeof(float), (void*)(5*sizeof(float)));
 
 
 
 
+	/////////////
+	//Texture
+	GLuint textures[2];
+	glGenTextures(2, textures);
 
 
+	int width, height;
+	unsigned char* image;
+
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	image = SOIL_load_image("sample.png", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+	glUniform1i(glGetUniformLocation(shaderProgram, "texKitten"), 0);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	image = SOIL_load_image("sample2.png", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+	glUniform1i(glGetUniformLocation(shaderProgram, "texPuppy"), 1);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	///////////
 	//RUN LOOP
+
+	GLuint timeUn = glGetUniformLocation(shaderProgram, "time");
+	GLuint mixValue = glGetUniformLocation(shaderProgram, "mixVal");
+	glUniform1f(mixValue, 0.5f);
 	while(!glfwWindowShouldClose(window))
 	{
-		/*
+		
 		float time = (float)clock() / (float)CLOCKS_PER_SEC;
-		glUniform3f(uniColor,
-			 (sin(time * 100.0f) + 1.0f) / 2.0f,
-			 (sin(time * 100.0f + 1.f) + 1.0f) / 2.0f,
-			 (sin(time * 100.0f + 2.f) + 1.0f) / 2.0f);
-		*/
+		glUniform1f(timeUn, time);
+		//glUniform1f(mixValue, (sin(time * 100.0f) + 1.0f) / 2.0f);
 		
 		// Clear the screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
