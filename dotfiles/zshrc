@@ -1,0 +1,27 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
+
+export DEVELOPER_DIR="/Applications/XCode.app/Contents/Developer"
+export symbolicatecrash="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/PrivateFrameworks/DTDeviceKitBase.framework/Versions/A/Resources/symbolicatecrash"
+export PATH=$PATH:~/bin:~/Development/android-sdk/platform-tools:~/Development/android-sdk/tools:/Users/sergivelez/.apportable/SDK/bin:~/Development/android-ndk-r9:/usr/local/bin
+
+
+alias xbmc='ssh xbmc@192.168.1.33' 
+alias soccos3='ssh soccosth@soccos3.org'
+alias mobile-mac-server='ssh socialpoint@mobile-mac-server'
+alias mobile-mac-pro='ssh jenkins@mobile-mac-pro'
+alias mobile-mac-pro-admin='ssh macpro@mobile-mac-pro'
+
+alias ssh=/Users/sergivelez/bin/ssh-ident
+export GIT_SSH=/Users/sergivelez/bin/ssh-ident

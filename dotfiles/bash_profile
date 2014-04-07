@@ -1,0 +1,56 @@
+alias ll='ls -l'
+alias gitpsu='git pull && git submodule update'
+
+export PATH=$PATH:$HOME/bin:$HOME/Development/android-sdk/tools:/opt/local/bin:$HOME/Development/android-ndk-r7-crystax-5.beta2
+
+if [ -f /opt/local/etc/bash_completion ]; then
+. /opt/local/etc/bash_completion
+fi
+
+source ~/.git-completion.bash
+source ~/.git-prompt.sh 
+
+export GIT_SSL_NO_VERIFY=true
+export EDITOR=vim
+#export EDITOR='subl -w'
+export pngcrush=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/pngcrush
+
+function gitvimdiff {
+    git status && git diff | mvim -
+}
+
+function svnvimdiff {
+    svn status && svn diff | mvim -
+}
+
+
+
+function proml {
+  local         RED="\[\033[0;31m\]"
+  local   LIGHT_RED="\[\033[1;31m\]"
+  local      YELLOW="\[\033[0;33m\]"
+  local LIGHT_GREEN="\[\033[1;32m\]"
+  local       WHITE="\[\033[1;37m\]"
+  local  LIGHT_GRAY="\[\033[0;37m\]"
+  local LIGHT_PURPLE="\[\033[1;34m\]"
+  case $TERM in
+    xterm*)
+    TITLEBAR='\[\033]0;\u@\h:\w\007\]'
+    ;;
+    *)
+    TITLEBAR=""
+    ;;
+  esac
+
+  GIT_PS1_SHOWDIRTYSTATE=true
+ 
+PS1="${TITLEBAR}\
+$WHITE\w$YELLOW\$(__git_ps1)\
+$LIGHT_GRAY\$ "
+PS2='> '
+PS4='+ '
+}
+proml
+
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*

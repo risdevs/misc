@@ -1,0 +1,51 @@
+[user]
+	name = Sergi Velez
+	email = ris@risdevs.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	pager = true
+	ui = always
+[apply]
+	whitespace = fix
+[core]
+	excludesfile = /Users/sergi/.gitignore
+#	editor = vim
+	editor = "atom --wait"
+	quotepath = false
+	ignorecase = false
+
+[alias]
+	f = fetch
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	cp = cherry-pick
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+	tag-date = for-each-ref --format '%(refname:short) %(taggerdate:short)' refs/tags
+	pod = push origin develop
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+        keepBackup = false
+        trustExitCode = false
+[mergetool "Kaleidoscope"]
+        cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
+
+[github]
+	user = risdevs
+	token = 51e89f8390329ea3719da4902af42161
+[gui]
+	spellingdictionary = none
+	newbranchtemplate = feature-
+
+[diff "localizablestrings"]
+	textconv = "iconv -f utf-16 -t utf-8"
+[credential]
+	helper = osxkeychain
