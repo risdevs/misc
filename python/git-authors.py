@@ -18,7 +18,8 @@ def main():
 
     for month in range(1, 13):
         logging.debug( "month: %d", month);
-        p1 = subprocess.Popen("git shortlog -s -n -e --since='2013-" + `month` + "-01' --until='2013-" + `month` + "-31'", shell=True, stdout=subprocess.PIPE);
+        p1 = subprocess.Popen("git shortlog -s -n -e --since='2013-" + `month` +
+                "-01' --until='2013-" + `month` + "-31'", shell=True, stdout=subprocess.PIPE);
         output = p1.communicate()[0];
 
 
@@ -41,3 +42,4 @@ if __name__ == '__main__':
     import sys
 
     sys.exit(main())
+
